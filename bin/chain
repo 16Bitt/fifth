@@ -1,0 +1,6 @@
+LAST=""
+
+for i; do
+	./require/exec.rb $i.f $i.asm $LAST
+	LAST="$i"
+done

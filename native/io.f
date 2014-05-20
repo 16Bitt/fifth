@@ -1,0 +1,4 @@
+{ EMIT
+T FPOP AX
+NT MOV AH, 0xE
+NT INT 0x10 }
