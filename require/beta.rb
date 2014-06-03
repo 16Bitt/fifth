@@ -29,8 +29,10 @@ class Spreader
 
 	def addWord name, flag = nil
 		@table += "\nFLBL#{@label}:"
-		@table += "\n\tdw #{@last}\n\tdb \"#{name}\",0"
-		
+		@table += "\n\tdw #{@last}\n\tdb \"#{name}\",0"		
+		@table += "\n%undef LASTVAL"
+		@table += "\n%define LASTVAL FLBL#{@label}"
+
 		if flag
 			@table += "\n\tCALL 0:lbl#{@label}\n\tNEXT"
 		end
@@ -45,6 +47,11 @@ class Spreader
 		name = read
 		addWord name, true
 		@file += "\nlbl#{@label - 1}:"
+		
+		if name == "MAIN"
+			@file += "\nMAIN:"
+		end
+		
 		while true
 			key = read
 
@@ -74,6 +81,11 @@ class Spreader
 		name = read
 		addWord name
 		
+		if name == "MAIN"
+			puts "MAIN IS AT lbl#{@label - 1}"
+			@table += "\nMAIN:"
+		end
+
 		@table += "\nlbl#{@label - 1}:"
 
 		while true
@@ -82,7 +94,7 @@ class Spreader
 			if key == ";"
 				break
 			elsif number? key
-				@table += "\n\tdb PUSHVAL\n\tdw #{key}\n\tCALL 0:CPUSHF\n\t"
+				@table += "\n\tMOV AX, #{key}\n\tCALL 0:CPUSHF\n\t"
 			else
 				@table += "\n\tCALL 0:lbl#{@names.get key}"
 			end
@@ -114,7 +126,7 @@ class Spreader
 			file.puts @label
 			file.close
 
-			puts "LAST LABEL: lbl" + (@label - 1).to_s
+			#puts "LAST LABEL: lbl" + (@label - 1).to_s
 		rescue Exception => e
 			abort "File Write Error"
 		end

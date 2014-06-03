@@ -1,0 +1,5 @@
+#!/bin/sh
+
+for i; do
+	./require/compile.rb $i.4 $i.f
+done

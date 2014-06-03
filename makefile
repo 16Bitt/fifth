@@ -1,5 +1,6 @@
 SOURCES 	= bootsec.bin next.bin
-VOCABS		= native/io native/basic
+VOCABS		= native/data native/variable native/compare native/basic native/io
+COMPILED	= port/none port/hi-io port/util port/main
 ASFLAGS		= -fbin
 
 all: img/space.bin img/hunk.bin img/bootsec.bin
@@ -17,13 +18,15 @@ img/hunk.bin: forth
 img/space.bin:
 	dd if=/dev/zero of=img/space.bin conv=sync count=4
 
-forth: 
-	./bin/chain $(VOCABS)
+forth:
+	./bin/comp $(COMPILED)
+	./bin/chain $(VOCABS) $(COMPILED)
 	mv native/*.asm ./
-	-rm native/*.last native/*.names native/*.values
+	mv port/*.asm ./
+	-rm native/*.last native/*.names native/*.values port/*.f port/*.last port/*.names port/*.values
 
 clean:
 	-rm img/* build/* *.asm hunk.s
 
-run:
-	qemu-system-i386 -fda build/disk.img -monitor stdio
+run: all
+	qemu-system-x86_64 -boot a  -fda build/disk.img -monitor stdio

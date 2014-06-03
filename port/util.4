@@ -1,0 +1,8 @@
+: LIST
+	LAST @
+	:LISTLOOP
+		DUP WS + .S
+		@ DUP
+	NZGOTO LISTLOOP
+	DROP
+;
