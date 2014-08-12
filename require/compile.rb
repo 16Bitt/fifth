@@ -26,7 +26,7 @@ begin
 			@output += "{ #{stream[index + 1]}\n"
 			index += 1
 		elsif stream[index] == ";"
-			@output += "}"
+			@output += "}\n"
 		elsif stream[index][0].chr == ":"
 			@output += "N #{stream[index][1...stream[index].length]}:\n"
 		elsif stream[index] == "GOTO"

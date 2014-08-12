@@ -34,3 +34,4 @@
 %define MIRROR	STACK+512
 %define STRBUF	MIRROR+128
 %define DISK	STRBUF+512
+%define HEAP	DISK+512
